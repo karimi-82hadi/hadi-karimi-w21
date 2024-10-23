@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 
+import ProductItem from "../components/ProductItem";
 import { getProducts } from "../services/user";
 
 import styles from "./AccountPage.module.css";
-import ProductItem from "../components/ProductItem";
 
 function AccountPage() {
   const { data, isPending, error } = useQuery({
@@ -11,7 +11,6 @@ function AccountPage() {
     queryFn: getProducts,
   });
 
-  console.log({ data, isPending, error });
   return (
     <div className={styles.container}>
       <div className={styles.headerSearch}>
