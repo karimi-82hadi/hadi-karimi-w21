@@ -1,15 +1,39 @@
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
 import ProductItem from "../components/ProductItem";
+import Modal from "../components/Modal";
+import AddProductForm from "../components/AddProductForm";
+import api from "../configs/axios";
 import { getProducts } from "../services/user";
 
 import styles from "./AccountPage.module.css";
 
 function AccountPage() {
-  const { data, isPending, error } = useQuery({
+  const { data, isPending, error, refetch } = useQuery({
     queryKey: ["products"],
     queryFn: getProducts,
   });
+  const [addModal, setAddModal] = useState(false);
+
+  console.log(data);
+
+  const addHandler = async (data) => {
+    if (!data.name) return toast.error("لطفا نام کالا را وارد نمایید.");
+    if (!data.quantity) return toast.error("لطفا تعداد کالا را وارد نمایید.");
+    if (!data.price) return toast.error("لطفا قیمت کالا را وارد نمایید.");
+
+    try {
+      await api.post("/products/", data);
+      setAddModal(false);
+      refetch();
+      return toast.success("محصول با موفقیت افزوده شد.");
+    } catch (err) {
+      console.log(err);
+      return toast.error("هنگام افزودن محصول مشکلی پیش آمد.");
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -38,7 +62,7 @@ function AccountPage() {
             </svg>
             <h2>مدیریت کالا</h2>
           </div>
-          <button>افزودن محصول</button>
+          <button onClick={() => setAddModal(true)}>افزودن محصول</button>
         </div>
         <div className={styles.mainContent}>
           <table>
@@ -59,6 +83,11 @@ function AccountPage() {
           </table>
         </div>
       </div>
+      {addModal && (
+        <Modal>
+          <AddProductForm setAddModal={setAddModal} addHandler={addHandler} />
+        </Modal>
+      )}
     </div>
   );
 }
