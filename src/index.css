@@ -19,3 +19,17 @@
   font-family: Vazirmatn, Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   color: #14151b;
 }
+
+body {
+  background-color: #f7f7f8;
+}
+
+input,
+button {
+  border: none;
+  outline: none;
+}
+
+a {
+  text-decoration: none;
+}

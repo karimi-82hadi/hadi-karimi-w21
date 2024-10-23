@@ -18,8 +18,14 @@ function Router() {
         path="account"
         element={token ? <AccountPage /> : <Navigate to="/login" />}
       />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/signup" element={<SignupPage />} />
+      <Route
+        path="/login"
+        element={token ? <Navigate to="/account" /> : <LoginPage />}
+      />
+      <Route
+        path="/signup"
+        element={token ? <Navigate to="/account" /> : <SignupPage />}
+      />
       <Route path="/*" element={<PageNotFound />} />
     </Routes>
   );

@@ -1,3 +1,7 @@
+const setCookie = (cookieName, maxAge) => {
+  document.cookie = `accToken=${cookieName}; max-age=${maxAge}`;
+};
+
 const getCookie = (cookieName) => {
   return document.cookie
     .split(";")
@@ -5,4 +9,4 @@ const getCookie = (cookieName) => {
     ?.split("=")[1];
 };
 
-export { getCookie };
+export { setCookie, getCookie };
