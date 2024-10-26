@@ -1,5 +1,8 @@
 import api from "../configs/axios";
 
-const getProducts = () => api.get("/products");
+const getProducts = ({ queryKey }) => {
+  const page = queryKey[1];
+  return api.get(`/products?page=${page}`);
+};
 
 export { getProducts };

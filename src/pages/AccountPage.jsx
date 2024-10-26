@@ -9,15 +9,15 @@ import api from "../configs/axios";
 import { getProducts } from "../services/user";
 
 import styles from "./AccountPage.module.css";
+import Pagination from "../components/Pagination";
 
 function AccountPage() {
+  const [page, setPage] = useState(1);
   const { data, isPending, error, refetch } = useQuery({
-    queryKey: ["products"],
+    queryKey: ["products", page],
     queryFn: getProducts,
   });
   const [addModal, setAddModal] = useState(false);
-
-  console.log(data);
 
   const addHandler = async (data) => {
     if (!data.name) return toast.error("لطفا نام کالا را وارد نمایید.");
@@ -42,7 +42,7 @@ function AccountPage() {
           <svg style={{ fill: "none", width: "24px", height: "24px" }}>
             <use href="/src/assets/icons/static_symbol.svg#icon-search"></use>
           </svg>
-          <input type="text" placeholder="جستجو کالا" />
+          <input type="text" placeholder="جستجو کالا" readOnly />
         </div>
         <div className={styles.headerProfile}>
           <div style={{ display: "flex" }}>
@@ -77,12 +77,18 @@ function AccountPage() {
             </thead>
             <tbody>
               {data?.data.map((p) => (
-                <ProductItem key={p.id} data={p} />
+                <ProductItem
+                  key={p.id}
+                  data={p}
+                  page={page}
+                  setPage={setPage}
+                />
               ))}
             </tbody>
           </table>
         </div>
       </div>
+      <Pagination page={page} setPage={setPage} maxPage={data?.totalPages} />
       {addModal && (
         <Modal>
           <AddProductForm setAddModal={setAddModal} addHandler={addHandler} />

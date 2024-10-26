@@ -6,24 +6,26 @@ import Modal from "./Modal";
 import EditProductForm from "./EditProductForm";
 import api from "../configs/axios";
 import { getProducts } from "../services/user";
-
-import styles from "./ProductItem.module.css";
 import { e2p, sp } from "../utils/numbers";
 
-function ProductItem({ data }) {
-  const { id, name, price, quantity } = data;
+import styles from "./ProductItem.module.css";
+
+function ProductItem({ data: productData, page, setPage }) {
+  const { id, name, price, quantity } = productData;
   const [deleteModal, setDeleteModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
 
-  const { refetch } = useQuery({
-    queryKey: ["products"],
+  const { data, refetch } = useQuery({
+    queryKey: ["products", page],
     queryFn: getProducts,
   });
 
   const deleteHandler = async () => {
     try {
       await api.delete(`/products/${id}`);
+      setDeleteModal(false);
       refetch();
+      data.data.length === 1 && setPage((page) => page > 1 && page - 1);
       return toast.success("محصول با موفقیت حذف شد.");
     } catch (err) {
       return toast.error("هنگام حذف کردن محصول مشکلی پیش آمد.");
@@ -84,7 +86,7 @@ function ProductItem({ data }) {
       {editModal && (
         <Modal>
           <EditProductForm
-            data={data}
+            data={productData}
             setEditModal={setEditModal}
             editHandler={editHandler}
           />
