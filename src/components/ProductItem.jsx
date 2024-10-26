@@ -46,9 +46,9 @@ function ProductItem({ data: productData, page, setPage }) {
   return (
     <>
       <tr>
-        <td>{name}</td>
+        <td>{e2p(name)}</td>
         <td>{e2p(quantity)}</td>
-        <td>{sp(price)} هزار تومان</td>
+        <td>{sp(price)} تومان</td>
         <td colSpan="2">{id}</td>
         <td>
           <div>

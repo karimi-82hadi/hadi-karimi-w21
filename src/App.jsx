@@ -5,7 +5,15 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-  const client = new QueryClient();
+  const client = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
+        retry: 1,
+      },
+    },
+  });
 
   return (
     <QueryClientProvider client={client}>

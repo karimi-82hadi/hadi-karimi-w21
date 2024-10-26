@@ -32,10 +32,10 @@ function LoginPage() {
     const { res, err } = await loginUser(form);
 
     if (res) {
-      setCookie(res.token, 24 * 60 * 60 * 1000);
+      setCookie(res.token, 24 * 60 * 60);
       toast.success("با موفقیت وارد حساب کاربری شدید.");
       setTimeout(() => {
-        naviagate("/");
+        naviagate("/account");
       }, 3000);
       return;
     }

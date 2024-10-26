@@ -5,15 +5,16 @@ import { toast } from "react-toastify";
 import ProductItem from "../components/ProductItem";
 import Modal from "../components/Modal";
 import AddProductForm from "../components/AddProductForm";
+import Pagination from "../components/Pagination";
+import Loader from "../shared/Loader";
 import api from "../configs/axios";
 import { getProducts } from "../services/user";
 
 import styles from "./AccountPage.module.css";
-import Pagination from "../components/Pagination";
 
 function AccountPage() {
   const [page, setPage] = useState(1);
-  const { data, isPending, error, refetch } = useQuery({
+  const { data, isPending, refetch } = useQuery({
     queryKey: ["products", page],
     queryFn: getProducts,
   });
@@ -30,7 +31,6 @@ function AccountPage() {
       refetch();
       return toast.success("محصول با موفقیت افزوده شد.");
     } catch (err) {
-      console.log(err);
       return toast.error("هنگام افزودن محصول مشکلی پیش آمد.");
     }
   };
@@ -76,14 +76,27 @@ function AccountPage() {
               </tr>
             </thead>
             <tbody>
-              {data?.data.map((p) => (
-                <ProductItem
-                  key={p.id}
-                  data={p}
-                  page={page}
-                  setPage={setPage}
-                />
-              ))}
+              {!!isPending && (
+                <tr style={{ border: "none" }}>
+                  <td colSpan="6">
+                    <Loader />
+                  </td>
+                </tr>
+              )}
+              {data
+                ? data?.data.map((p) => (
+                    <ProductItem
+                      key={p.id}
+                      data={p}
+                      page={page}
+                      setPage={setPage}
+                    />
+                  ))
+                : !isPending && (
+                    <tr style={{ border: "none", textAlign: "center" }}>
+                      <td colSpan="6">هیچ محصولی یافت نشد.</td>
+                    </tr>
+                  )}
             </tbody>
           </table>
         </div>

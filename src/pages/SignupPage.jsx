@@ -49,8 +49,6 @@ function SignupPage() {
     if (err) {
       return toast.error("کاربر با این نام کاربری وجود دارد.");
     }
-
-    console.log({ res, err });
   };
 
   return (
